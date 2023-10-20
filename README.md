@@ -1,5 +1,9 @@
 # JobFinder
 
+Lien dataset : https://www.kaggle.com/datasets/willianoliveiragibin/data-jobs-salaries
+
+Lien frontend : https://streamlit.io/
+
 ## Objectifs :
 
 - Créer une interface utilisateur
