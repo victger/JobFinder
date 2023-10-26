@@ -17,9 +17,9 @@ Lien frontend : https://streamlit.io/
 
 ## Frontend via streamlit
 
-## Base de donnée
+## Base de données
 
 ## Sécurité (optionnel)
 
-Notation basé sur le backend et frontend surtout en bonus
-Créé par Y.Lakhdari, V.Gerard, Y.Tisso.
+Notation basée sur le backend et frontend surtout en bonus.
+Créé par Y.Lakhdari, V.Gerard, Y.Tissot.
