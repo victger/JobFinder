@@ -4,3 +4,4 @@ pydantic
 psycopg2
 python-slugify
 minio
+streamlit
