@@ -2,8 +2,7 @@ from datetime import timedelta
 from minio import Minio
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import HTMLResponse
-from db.services import authentication
-from db.models import accueil_content as html_content
+from db.services.user import authentication
 
 app = FastAPI(
     title="My title",
@@ -20,8 +19,10 @@ async def show_bucket(name: str):
 
 @app.get("/", response_class=HTMLResponse)
 def read_root():
-    accueil_content = html_content
-    return HTMLResponse(content=accueil_content, status_code=200)
+    file_path = './db/models/accueil_content.html'
+    with open(file_path, 'r') as file:
+        html_content = file.read()
+        return HTMLResponse(content=html_content, status_code=200)
 
 @app.post("/authenticate")
 def authenticate(username: str = Form(...),password: str = Form(...)):
