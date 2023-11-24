@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 import os 
 
-dotenv_path = os.path.join(os.path.dirname(__file__), "../../../.env")  # Ajustez le chemin en fonction de votre structure de répertoire
+dotenv_path = os.path.join(os.path.dirname(__file__), "../.env")  # Ajustez le chemin en fonction de votre structure de répertoire
 load_dotenv(dotenv_path)
 
 POSTGRES_USER = os.environ.get("POSTGRES_USER")
@@ -20,5 +20,6 @@ engine = create_engine(
     SQLALCHEMY_DATABASE_URL
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=True, bind=engine)
+DB = SessionLocal()
 
 BaseSQL = declarative_base()

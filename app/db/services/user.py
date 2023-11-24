@@ -5,7 +5,7 @@ from db.schemas.user import User as SUser
 from db.models.user import User as MUser
 
 
-def get_user_by_id(user_id: str, db: Session) -> MUser:
+def get_user_by_id( db: Session,user_id: str) -> MUser:
     record = db.query(MUser).filter(MUser.id == user_id).first()
     if not record:
         raise HTTPException(status_code=404, detail="Not Found") 
@@ -21,9 +21,8 @@ def create_user(db: Session, username:str, password:str) -> MUser:
     return db_post
 
 def authentication(db: Session, username:str, password:str) -> bool:
-    user = SUser.User(name=username, password=password)
-    record = db.query(user).filter(MUser.name == user.name).first()
-    if not record or record.password != user.password:
+    record = db.query(MUser).filter(MUser.name == username and MUser.password == password).first()
+    if not record:
         raise HTTPException(status_code=404, detail="Username or password may be incorrect")
-    if record.password == user.password:
-        return True
+        return False
+    return True
