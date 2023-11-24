@@ -3,7 +3,6 @@ version: "3.4"
 networks:
   default:
     driver: bridge
-
 services:
   minio:
     container_name: minio
@@ -25,14 +24,3 @@ services:
       ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
     ports:
       - "5000:5000"
-  streamlit:
-    build: .
-    networks:
-      - default
-    volumes:
-      - ./app/:/app
-      - ./data/:/data
-    command:
-      ["streamlit", "run", "front.py"]
-    ports:
-      - "8501:8501"
