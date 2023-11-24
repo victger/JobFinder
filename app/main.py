@@ -15,22 +15,6 @@ app = FastAPI(
 
 client = Minio("minio:9000", "root", "rootpassword", secure=False)
 
-@app.post('/file/upload/')
-async def upload_file(file: UploadFile = File(...)):
-    result = client.put_object("name", file.filename, file.file, 5000)
-    return {'result': result}
-
-@app.put('/file/presigned/')
-async def put_presigned_file(name: str):
-    put_url = client.get_presigned_url(
-        "GET",
-        "name",
-        name,
-        expires=timedelta(days=1),
-        response_headers={"response-content-type": "application/json"},
-    )
-    return put_url
-
 @app.get('/bucket/show/')
 async def show_bucket(name: str):
     objects = client.list_objects(name, recursive=True)
@@ -40,29 +24,43 @@ async def show_bucket(name: str):
 def read_root():
     html_content = """
     <html>
-        <head>
-            <title>Hello user</title>
-            <style>
-                body {
-                    background-color: #3498db;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    margin: 0;
-                    color: white;
-                }
-                form {
-                    background-color: #ffffff;
-                    padding: 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                    width: 300px;
-                }
-            </style>
-        </head>
-        <body>
-            <center>
+    <head>
+        <title>Hello user</title>
+        <style>
+            body {
+                background-color: #3498db;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                color: white;
+            }
+            form {
+                background-color: #ffffff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                width: 300px;
+            }
+            .download-btn {
+                width: 100%;
+                margin-top: 10px;
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
             <h1>Hello user</h1>
             <form action="/authenticate" method="post">
                 <label for="username">Username:</label>
@@ -71,9 +69,12 @@ def read_root():
                 <input type="password" id="password" name="password" style="width: 100%; margin-bottom: 10px;">
                 <button type="submit" style="width: 100%;">Submit</button>
             </form>
-            </center>
-        </body>
-    </html>
+            <button onclick="downloadFile()">Download File</button>
+        </center>
+        <script src="script.js"></script>
+    </body>
+</html>
+
     """
     return HTMLResponse(content=html_content, status_code=200)
 
