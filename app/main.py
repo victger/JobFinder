@@ -1,6 +1,7 @@
 from datetime import timedelta
 from minio import Minio
-from fastapi import FastAPI, File, UploadFile, Form, HTMLResponse
+from fastapi import FastAPI, File, UploadFile, Form
+from fastapi.responses import HTMLResponse
 from db.services import authentication
 from db.models import accueil_content as html_content
 
