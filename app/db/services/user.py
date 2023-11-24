@@ -1,8 +1,5 @@
-from typing import List
-
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from datetime import datetime
 
 from schemas import user as SUser
 from models import user as MUser
@@ -15,13 +12,18 @@ def get_user_by_id(user_id: str, db: Session) -> MUser:
     record.id = str(record.id)
     return record
 
-def create_user(db: Session, user: SUser.User) -> MUser:
-    record = db.query(MUser.User).filter(MUser.id == user.id).first()
-    if record:
-        raise HTTPException(status_code=409, detail="Already exists")
-    db_post = MUser(**user.dict())
+def create_user(db: Session, username:str, password:str) -> MUser:
+    db_post = MUser.User(name=username, password=password)
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
     db_post.id = str(db_post.id)
     return db_post
+
+def authentication(db: Session, username:str, password:str) -> bool:
+    user = SUser.User(name=username, password=password)
+    record = db.query(user).filter(MUser.name == user.name).first()
+    if not record or record.password != user.password:
+        raise HTTPException(status_code=404, detail="Username or password may be incorrect")
+    if record.password == user.password:
+        return True

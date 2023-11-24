@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.dialects.postgresql import UUID
-from .database import BaseSQL
+from .db import BaseSQL
 
 
 class User(BaseSQL):
