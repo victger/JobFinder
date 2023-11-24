@@ -11,6 +11,18 @@ services:
       - .env
     ports:
       - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - "5050:5050"
+    depends_on:
+      - db
+
   minio:
     container_name: minio
     image: quay.io/minio/minio
@@ -21,6 +33,7 @@ services:
       MINIO_ROOT_USER: root
       MINIO_ROOT_PASSWORD: rootpassword
     command: server /data --console-address :9001
+
   api:
     build: .
     networks:
