@@ -8,3 +8,4 @@ requests
 passlib
 python-dotenv
 datetime
+pandas
