@@ -8,6 +8,7 @@ class ExperienceLevel(PythonEnum):
     SE = 'SE'
     MI = 'MI'
     EX = 'EX'
+    EN = 'EN'
 
 class CompanySize(PythonEnum):
     S = 'S'
