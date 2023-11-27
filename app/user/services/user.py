@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from datetime import datetime as dt
 
-from db.schemas.user import User as SUser
-from db.models.user import User as MUser
+from user.schemas.user import User as SUser
+from user.models.user import User as MUser
 
 
 def get_user_by_id( db: Session,user_id: str) -> MUser:

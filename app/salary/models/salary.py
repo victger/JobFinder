@@ -1,4 +1,4 @@
-from .db import BaseSQL
+from db.services.db import BaseSQL
 
 from sqlalchemy import Column, String, DateTime, Enum, Integer
 from sqlalchemy.dialects.postgresql import UUID
