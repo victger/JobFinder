@@ -3,8 +3,10 @@ from datetime import timedelta
 from minio import Minio
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import HTMLResponse
-from db.services.user import authentication
-from db.models.db import BaseSQL, engine, DB 
+from db.services.user import *
+from db.models.db import BaseSQL, engine, DB
+from db.models.user import User 
+from typing import Optional
 
 app = FastAPI(
     title="My title",
@@ -25,21 +27,29 @@ async def show_bucket(name: str):
 
 @app.get("/", response_class=HTMLResponse)
 def read_root():
-    file_path = 'front/templates/index.html'
+    file_path = 'front/templates/accueil_content.html'
     with open(file_path, 'r') as file:
         html_content = file.read()
         return HTMLResponse(content=html_content, status_code=200)
 
-@app.post("/authenticate")
-def authenticate(username: str = Form(...),password: str = Form(...)):
-    if authentication(DB,username, password):
+@app.post("/")
+def authenticate(username: str = Form(...), password: str = Form(...)):
+    if authentication(DB, username, password):
         return "OKAY BG"
     else:
-        return "NOT OKAY BG"
-
-'''@app.get('/error', response_class=HTMLResponse)
-def error():
-    file_path = 'front/templates/index.html'
-    with open(file_path, 'r') as file:
+        error_message = "Incorrect password"
+        file_path = 'front/templates/error.html'
+        with open(file_path, 'r') as file:
+            html_content = file.read()
+            return HTMLResponse(content=html_content, status_code=200)
+        
+@app.get('/create_user')
+async def creation():
+    with open('front/templates/create_user.html', 'r') as file:
         html_content = file.read()
-    return HTMLResponse(content=html_content, status_code=200)'''
+    return HTMLResponse(content= html_content, status_code=200)
+
+@app.post('/submit_user')
+async def submit_user(ids:str = Form(...),name: str = Form(...), password: str = Form(...)):
+    create_user(DB, ids, name, password)
+    return "OKAY BG"

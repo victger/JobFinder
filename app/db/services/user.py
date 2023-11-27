@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from datetime import datetime as dt
 
 from db.schemas.user import User as SUser
 from db.models.user import User as MUser
@@ -12,8 +13,8 @@ def get_user_by_id( db: Session,user_id: str) -> MUser:
     record.id = str(record.id)
     return record
 
-def create_user(db: Session, username:str, password:str) -> MUser:
-    db_post = MUser.User(name=username, password=password)
+def create_user(db: Session, ids:str, username:str, password:str) -> MUser:
+    db_post = MUser(id=ids, username=username, password=password, description="", created_at=dt.now(), updated_at=dt.now())
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
@@ -23,6 +24,5 @@ def create_user(db: Session, username:str, password:str) -> MUser:
 def authentication(db: Session, username:str, password:str) -> bool:
     record = db.query(MUser).filter(MUser.name == username and MUser.password == password).first()
     if not record:
-        raise HTTPException(status_code=404, detail="Username or password may be incorrect")
         return False
     return True

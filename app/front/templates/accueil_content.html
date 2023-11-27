@@ -18,12 +18,37 @@
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
                 width: 300px;
             }
+            .download-btn {
+                width: 100%;
+                margin-top: 10px;
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            .user-create-button {
+            position: fixed;
+            top: 100px;
+            right: 100px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
         </style>
     </head>
     <body>
         <center>
             <h1>Hello user</h1>
-            <form action="/authenticate" method="post">
+            <form action="/" method="post">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" style="width: 100%; margin-bottom: 10px;">
                 <label for="password">Password:</label>
@@ -31,5 +56,12 @@
                 <button type="submit" style="width: 100%;">Submit</button>
             </form>
         </center>
+        <button class="create-user-button" onclick="redirectToCreateUser()">Sign up</button>
     </body>
+    <script>
+        function redirectToCreateUser() {
+            // Redirect to the /create_user page
+            window.location.href = '/create_user';
+        }
+    </script>
 </html>
