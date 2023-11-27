@@ -7,16 +7,13 @@ from fastapi import FastAPI, File, UploadFile, Form, Depends
 from fastapi.responses import HTMLResponse
 
 from db.services.user import *
+from db.services.salary import *
+
 from db.models.db import BaseSQL, engine, get_db
-from db.models.user import User 
 
 from db.models.salary import Salary
 
-from typing import Optional, List
 
-import pandas as pd
-import numpy as np
-import os
 
 app = FastAPI(
     title="My title",
@@ -29,14 +26,15 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup_event():
-    csv_file_path = "data/salaries.csv"
     BaseSQL.metadata.create_all(bind=engine)
-    df = pd.read_csv(csv_file_path)
-    df["id"] = np.arange(len(df))
-    print("result----------------------", df.index)
-    df.to_sql("salaries", engine, if_exists="replace", index=False)
+    create_salaries_from_csv()
 
+@app.get("/salaries/")
+def get_salaries(skip: int = 0, limit: int = 10, db = Depends(get_db)):
+    res = db.query(Salary).offset(skip).limit(limit).all()
+    return res
 
+### FRONT
 @app.get("/", response_class=HTMLResponse)
 def read_root():
     file_path = 'front/templates/accueil_content.html'
@@ -54,12 +52,6 @@ def authenticate(username: str = Form(...), password: str = Form(...)):
         with open(file_path, 'r') as file:
             html_content = file.read()
             return HTMLResponse(content=html_content, status_code=200)
-
-@app.get("/salaries/")
-def get_salaries(skip: int = 0, limit: int = 1, db = Depends(get_db)):
-    query = db.query(Salary).offset(skip).limit(limit)
-    res = query.all()
-    return res
 
 ### USER ###    
 
