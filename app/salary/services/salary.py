@@ -28,8 +28,9 @@ def get_mean_salary(query):
 
 def get_stats_from_loc(loc: str, db: Depends(get_db)=Depends(get_db)):
     mean = db.query(func.avg(Salary.salary)).filter(Salary.company_location.ilike(loc)).scalar()
-    print("test: ", mean)
-    return mean
+    mean = round(mean)
+    size = db.query(Salary).count()
+    return mean, size
 
 def get_mean_salary(df):
     pass

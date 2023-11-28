@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Statistics for Location: {{ location }}</title>
+  </head>
+  <body>
+    <h1>Statistics for Location: {{ location }}</h1>
+    {% if stats %}
+    <p>stats: {{ stats }}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Job Title</th>
+          <th>Salary</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for salary in salaries %}
+        <tr>
+          <td>{{ salary.job_title }}</td>
+          <td>{{ salary.salary }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No statistics available for the specified location.</p>
+    {% endif %}
+  </body>
+</html>
