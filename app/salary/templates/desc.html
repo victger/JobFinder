@@ -7,11 +7,20 @@
   </head>
   <body>
     <h1>Statistics for Description: {{ location }}</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Job Title</th>
+          <th>Salary</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for salary in salaries %}
         <tr>
           <td>{{ salary.job_title }}</td>
           <td>{{ salary.salary }}</td>
         </tr>
+        {% endfor %}
       </tbody>
     </table>
   </body>
