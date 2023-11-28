@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String
 from sqlalchemy.dialects.postgresql import UUID
 from db.services.db import BaseSQL
 
@@ -9,6 +9,4 @@ class User(BaseSQL):
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     name = Column(String)
     password = Column(String)
-    description = Column(String)
-    created_at = Column(DateTime())
-    updated_at = Column(DateTime())
+    created_at = Column(String)

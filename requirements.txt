@@ -8,8 +8,6 @@ requests
 passlib
 python-dotenv
 datetime
-
 alembic
-
 pandas
 numpy
