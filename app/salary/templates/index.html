@@ -15,5 +15,10 @@
     <button onclick="location.href='/salary/show_from_cv'">
       Chercher selon mon CV
     </button>
+    <form action="/salary/search_from_desc/" method="get">
+      <label for="description">Enter Location:</label>
+      <input type="text" id="description" name="desc" required />
+      <button type="submit">Get Results</button>
+    </form>
   </body>
 </html>

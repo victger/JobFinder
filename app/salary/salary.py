@@ -25,15 +25,20 @@ async def show_form(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @salariesRouter.get("/salary/show")
-def show_salaries(skip: int = 0, limit: int = 10, db = Depends(get_db)):
+async def show_salaries(skip: int = 0, limit: int = 10, db = Depends(get_db)):
     return get_salaries(skip, limit, db)
 
 @salariesRouter.get("/salary/show_from_loc/")
-def show_from_loc(loc: str, db = Depends(get_db)):
+async def show_from_loc(loc: str, db = Depends(get_db)):
     return get_salaries_from_loc(loc, db=db)
 
 @salariesRouter.get("/salary/show_stats_from_loc/")
-def show_stats_from_loc(request: Request, loc: str, db = Depends(get_db)):
+async def show_stats_from_loc(request: Request, loc: str, db = Depends(get_db)):
     stats =  get_stats_from_loc(loc, db=db)
     salaries = get_salaries_from_loc(loc, db=db)
     return templates.TemplateResponse("stats.html", {"request": request, "stats": stats, "location": loc, "salaries": salaries})
+
+@salariesRouter.get("/salary/search_from_desc/")
+async def search_from_desc(request: Request, desc: str):
+    return templates.TemplateResponse("desc.html", {"request": request, "stats": desc})
+

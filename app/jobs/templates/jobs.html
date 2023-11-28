@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Liste des métiers</title>
+  </head>
+  <body>
+    <h1>Liste des métiers</h1>
+
+    <!-- Boucle pour générer les boutons -->
+    <div id="jobs-list">
+      {% for job in jobs %}
+      <button>Télécharger la fiche métier pour {{ job }}</button>
+      <br />
+      {% endfor %}
+    </div>
+  </body>
+</html>

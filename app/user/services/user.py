@@ -19,6 +19,6 @@ def create_user(db: Session, username:str, password:str):
     db.refresh(db_post)
     return db_post
 
-def authentication(db: Session, username:str, password:str) -> bool:
-    record = db.query(MUser).filter(MUser.name == username and MUser.password == password).first()
-    return record!=None
+def authenticate_user(db: Session, username: str, password: str):
+    record = db.query(MUser).filter(MUser.name == username, MUser.password == password).first()
+    return record

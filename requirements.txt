@@ -3,11 +3,16 @@ sqlalchemy
 pydantic
 psycopg2
 python-slugify
+python-jose
 minio
 requests
 passlib
 python-dotenv
 datetime
 alembic
+#Data management
 pandas
 numpy
+#Web scrapping
+bs4
+requests
