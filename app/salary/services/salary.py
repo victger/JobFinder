@@ -42,5 +42,5 @@ def show_linkedIn():
     pass
 
 def search_with_desc(desc: str, db = Depends(get_db)):
-    res = db.query(Salary).filter(desc in Salary.job_title)
+    res = db.query(Salary).filter(Salary.company_location.ilike(desc)).all()
     return res

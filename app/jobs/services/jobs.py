@@ -8,6 +8,12 @@ from fastapi import Depends
 from salary.models.salary import Salary
 from db.services.db import engine, get_db
 
+def jobs_list():
+
+    csv_file = 'data/salaries.csv'
+    df = pd.read_csv(csv_file)
+    jobs = df['job_title'].unique().tolist()
+
 def create_bucket(client, bucket_name: str):
     if not client.bucket_exists(bucket_name):
         client.make_bucket(bucket_name)

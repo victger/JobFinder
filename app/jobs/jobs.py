@@ -18,9 +18,9 @@ async def startup_event(bucket_name: str="jobs-pdf", folder_path: str=FOLDER_PAT
     create_bucket(client, bucket_name)
     put_pdf_bucket(client, bucket_name, folder_path)
 
-@jobsRouter.get('/jobs')
-async def show_jobs():
-    return templates.TemplateResponse('jobs.html')
+@jobsRouter.get('/jobs', response_class=HTMLResponse)
+async def show_jobs(request : Request):
+    return templates.TemplateResponse('index.html', {"request": request})
 
 templates = Jinja2Templates(directory="jobs/templates")
 
