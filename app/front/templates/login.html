@@ -12,11 +12,24 @@
                 color: white;
             }
             form {
-                background-color: #ffffff;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                width: 300px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 8px;
+                color : black;
+            }
+
+            input {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 16px;
+                box-sizing: border-box;
             }
             .download-btn {
                 width: 100%;
@@ -47,13 +60,13 @@
     </head>
     <body>
         <center>
-            <h1>Hello user</h1>
+            <h1>Hello please login for your favorite content !</h1>
             <form action="/" method="post">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" style="width: 100%; margin-bottom: 10px;">
+                <input type="text" id="username" name="username" required>
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" style="width: 100%; margin-bottom: 10px;">
-                <button type="submit" style="width: 100%;">Submit</button>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Log in</button>
             </form>
         </center>
         <button class="create-user-button" onclick="redirectToCreateUser()">Sign up</button>

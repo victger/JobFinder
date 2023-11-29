@@ -1,19 +1,17 @@
-from fastapi import APIRouter,Form, Depends
+from fastapi import APIRouter,Form, Depends, Request
 from sqlalchemy.orm import Session
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.security import OAuth2PasswordBearer
 from user.services.user import *
 from db.services.db import get_db
-from user.models.user import User
 from datetime import timedelta, datetime as dt
 from jose import jwt,JWTError
+import hashlib
 
 userRouter = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="submit_user")
 FRONT_PATH = "front/templates/"
 SECRET_KEY = "123456789"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
 def create_access_token(data: dict, expires_delta: timedelta):
     to_encode = data.copy()
@@ -27,19 +25,29 @@ def auth_token(db: Session, token: str) -> bool:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id: str = payload.get("sub")
         if user_id:
-            return db.query(User).filter(User.id == user_id, User.token == token).first() is not None
+            return get_user_token(db,token) is not None
     except JWTError:
-        return False
+        pass
     return False
 
-async def get_current_user(token: str = Depends(oauth2_scheme), DB: Session = Depends(get_db)):
-    user_authenticated = auth_token(DB, token)
-    if user_authenticated:
-        return token
-    user = DB.query(User).filter(User.token == token).first()
-    if user:
-        return token
-    return None
+async def get_current_user(request: Request, DB: Session = Depends(get_db)):
+    try:
+        token = request.headers.get("cookie", "")[6:]
+        user_authenticated = auth_token(DB, token)
+        if user_authenticated:
+            return token
+    except:
+        pass
+    return RedirectResponse(url="/", status_code=303)
+
+def login(DB: Session,record):
+    token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(data={"sub": str(record.id)}, expires_delta=token_expires)
+    record.token = access_token
+    response = RedirectResponse(url="/accueil", status_code=303)
+    response.set_cookie(key="token", value=access_token, expires=timedelta(hours=1), secure=False, httponly=True)
+    DB.commit()
+    return response
 
 @userRouter.get("/", response_class=HTMLResponse)
 async def read_root():
@@ -48,18 +56,15 @@ async def read_root():
         return HTMLResponse(content=html_content, status_code=200)
 
 @userRouter.post("/")
-async def authenticate(username: str = Form(...), password: str = Form(...),DB: Session = Depends(get_db)):
-    user = authenticate_user(DB, username, password)
-    if user:
-        token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-        access_token = create_access_token(data={"sub": user.id}, expires_delta=token_expires)
-        user.token = access_token
-        DB.commit()
-        return RedirectResponse(url="/accueil", status_code=303, headers={"Authorization": f"Bearer {access_token}"})
+async def split_accueil(username: str = Form(...), password: str = Form(...),DB: Session = Depends(get_db)):
+    hashed = hashlib.sha256(password.encode())
+    record = authenticate_user(DB, str(username), str(hashed.hexdigest()))
+    if record is not None:
+        return login(DB, record)
     else:
-        with open(f'{FRONT_PATH}/error.html', 'r') as file:
+        with open(f'{FRONT_PATH}/login.html', 'r') as file:
             html_content = file.read()
-            return HTMLResponse(content=html_content, status_code=200)
+            return HTMLResponse(content=html_content.replace('Hello please login for your favorite content !','Your username or password may be incorrect'), status_code=200)
 
 @userRouter.get('/create_user')
 async def creation():
@@ -67,24 +72,26 @@ async def creation():
         html_content = file.read()
     return HTMLResponse(content= html_content, status_code=200)
 
-@userRouter.post('/submit_user')
-async def submit_user(
-    name: str = Form(...),
-    password: str = Form(...),
-    db: Session = Depends(get_db)
-):
-    existing_user = db.query(User).filter(User.name == name).first()
-    if existing_user:
-        return "Username already exists, please put another name"
-    record = create_user(db, name, password)
-    token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": record.id}, expires_delta=token_expires)
-    record.token = access_token
-    db.commit()
-    return RedirectResponse(url="/accueil", status_code=303, headers={"Authorization": f"Bearer {access_token}"})
+@userRouter.post('/create_user')
+async def submit_user(username: str = Form(...),password: str = Form(...),db: Session = Depends(get_db)):
+    if len(username) < 4 or len(password) < 4:
+        with open(f'{FRONT_PATH}/create_user.html', 'r') as file:
+            html_content = file.read()
+            return HTMLResponse(content= html_content.replace('Please create an account','Username or password too short, please change to have more than 4 characters for each'), status_code=200)
+        
+    if get_user(db, username) is not None:
+            with open(f'{FRONT_PATH}/create_user.html', 'r') as file:
+                html_content = file.read()
+                return HTMLResponse(content= html_content.replace('Please create an account','Username already taken, please change'), status_code=200)
+    hashed = hashlib.sha256(password.encode())
+    record = create_user(db, str(username), str(hashed.hexdigest()))
+    return login(db, record)
 
 @userRouter.get('/accueil')
-async def accueil(user = Depends(get_current_user)):
+async def accueil(request: Request, user_token = Depends(get_current_user),DB: Session = Depends(get_db)):
+    if type(user_token) is not str:
+        return user_token
+    
     with open(f'{FRONT_PATH}/accueil.html', 'r') as file:
         html_content = file.read()
-    return HTMLResponse(content= html_content, status_code=200)
+    return HTMLResponse(content= html_content.replace('user',get_user_token(DB,user_token).username), status_code=200)
