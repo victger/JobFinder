@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import os
+from datetime import timedelta
 
 from sqlalchemy import func
 
@@ -13,6 +14,8 @@ def jobs_list():
     csv_file = 'data/salaries.csv'
     df = pd.read_csv(csv_file)
     jobs = df['job_title'].unique().tolist()
+
+    return jobs
 
 def create_bucket(client, bucket_name: str):
     if not client.bucket_exists(bucket_name):
@@ -30,3 +33,10 @@ def put_pdf_bucket(client, bucket_name: str, folder_path: str):
                 client.fput_object(bucket_name, object_name, file_path)
             except Exception as e:
                 pass
+
+def generate_download_url(client, job: str):
+    try:
+        return client.presigned_get_object("jobs-pdf", f"{job}.pdf")
+    except Exception as e:
+        print(f"Erreur lors de la génération de l'URL signée : {str(e)}")
+        return None

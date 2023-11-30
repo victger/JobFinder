@@ -7,12 +7,35 @@
   <body>
     <h1>Liste des métiers</h1>
 
-    <!-- Boucle pour générer les boutons -->
-    <div id="jobs-list">
+    <ul>
       {% for job in jobs %}
-      <button>Télécharger la fiche métier pour {{ job }}</button>
-      <br />
+        <li>{{ job }}</li>
+        {% if job in ["Data Scientist", "Data Analyst", "Data Engineer"] %}
+          <button onclick="downloadInfo('{{ job }}')">Download info</button>
+        {% endif %}
       {% endfor %}
-    </div>
+    </ul>
   </body>
 </html>
+
+<script>
+
+async function downloadInfo(job) {
+    try {
+        const response = await fetch(`/jobs/download_info_${job}`);
+        const data = await response.json();
+
+        // Vérifier si l'URL de téléchargement est disponible dans la réponse
+        if (data.download_url) {
+            // Initier le téléchargement du fichier en utilisant l'URL obtenue
+            window.location.href = data.download_url;
+        } else {
+            console.error("Erreur lors de la génération de l'URL signée.");
+        }
+    } catch (error) {
+        console.error("Erreur lors du téléchargement du fichier:", error);
+    }
+}
+
+
+</script>

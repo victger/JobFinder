@@ -10,6 +10,7 @@ from Minio.minio import client
 import os
 
 jobsRouter = APIRouter()
+templates = Jinja2Templates(directory="jobs/templates")
 
 FOLDER_PATH= "data/fiche_metier"
 
@@ -20,8 +21,13 @@ async def startup_event(bucket_name: str="jobs-pdf", folder_path: str=FOLDER_PAT
 
 @jobsRouter.get('/jobs', response_class=HTMLResponse)
 async def show_jobs(request : Request):
-    return templates.TemplateResponse('index.html', {"request": request})
+    jobs= jobs_list()
+    return templates.TemplateResponse('index.html', {"request": request, "jobs": jobs})
 
-templates = Jinja2Templates(directory="jobs/templates")
-
-
+@jobsRouter.get("/jobs/download_info_{job}")
+def download_info_endpoint(job: str, client):
+    download_url = generate_download_url(client=client, job=job)
+    if download_url:
+        return {"download_url": download_url}
+    else:
+        return {"message": "Erreur lors de la génération de l'URL signée"}
