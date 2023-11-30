@@ -13,6 +13,5 @@ alembic
 #Data management
 pandas
 numpy
-#Web scrapping
-bs4
-requests
+
+PyPDF2
