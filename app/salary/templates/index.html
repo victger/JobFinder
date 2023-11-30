@@ -12,13 +12,68 @@
       <input type="text" id="location" name="loc" required />
       <button type="submit">Get Statistics</button>
     </form>
-    <button onclick="location.href='/salary/show_from_cv'">
+    <button onclick="location.href='/salary/show_cv'">
       Chercher selon mon CV
     </button>
-    <form action="/salary/search_from_desc/" method="get">
+    <form action="/salary/show_from_desc/" method="get">
       <label for="description">Enter description:</label>
       <input type="text" id="description" name="desc" required />
       <button type="submit">Get Results</button>
+    </form>
+
+    <h1>Statistics for Description: {{ location }}</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Job Title</th>
+          <th>Salary</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if salaries%} {% for salary in salaries %}
+        <tr>
+          <td>{{ salary.job_title }}</td>
+          <td>{{ salary.salary }}</td>
+        </tr>
+        {% endfor %} {%endif%}
+      </tbody>
+    </table>
+    <div class="pagination">
+      <span class="step-links">
+        {% if page > 1 %}
+        <a href="/salary/show_from_desc/?desc={{ desc }}&page=1"
+          >&laquo; first</a
+        >
+        <a href="/salary/show_from_desc/?desc={{ desc }}&page={{ page-1 }}"
+          >previous</a
+        >
+        {% endif %}
+
+        <span class="current"> Page {{ page }} of {{ total_pages }} </span>
+
+        {% if page < total_pages %}
+        <a href="/salary/show_from_desc/?desc={{ desc }}&page={{ page+1 }}"
+          >next</a
+        >
+        <a href="/salary/show_from_desc/?desc={{ desc }}&page={{ total_pages }}"
+          >last &raquo;</a
+        >
+        {% endif %}
+      </span>
+    </div>
+
+    <!-- Ajout du bouton pour changer de page -->
+    <form action="/salary/show_from_desc/" method="get">
+      <label for="new_page">Go to Page:</label>
+      <input
+        type="number"
+        id="new_page"
+        name="page"
+        min="1"
+        value="{{ page }}"
+        required
+      />
+      <button type="submit">Go</button>
     </form>
   </body>
 </html>

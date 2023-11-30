@@ -15,12 +15,12 @@
         </tr>
       </thead>
       <tbody>
-        {% for salary in salaries %}
+        {% if salaries %} {% for salary in salaries %}
         <tr>
           <td>{{ salary.job_title }}</td>
           <td>{{ salary.salary }}</td>
         </tr>
-        {% endfor %}
+        {% endfor %} {% endif %}
       </tbody>
     </table>
   </body>
