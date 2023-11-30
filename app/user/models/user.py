@@ -4,7 +4,7 @@ from db.services.db import BaseSQL
 
 
 class User(BaseSQL):
-    __tablename__ = "posts"
+    __tablename__ = "user"
 
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     username = Column(String)
