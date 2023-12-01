@@ -8,6 +8,8 @@ from sqlalchemy import func
 from fastapi import Depends
 from salary.models.salary import Salary
 from db.services.db import engine, get_db
+from Minio.minio import client
+
 
 def jobs_list():
 
@@ -34,9 +36,9 @@ def put_pdf_bucket(client, bucket_name: str, folder_path: str):
             except Exception as e:
                 pass
 
-def generate_download_url(client, job: str):
+def generate_download_url(client= client):
     try:
-        return client.presigned_get_object("jobs-pdf", f"{job}.pdf")
+        return client.presigned_get_object("jobs-pdf", "Data Scientist.pdf")
     except Exception as e:
         print(f"Erreur lors de la génération de l'URL signée : {str(e)}")
         return None
