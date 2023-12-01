@@ -36,9 +36,9 @@ def put_pdf_bucket(client, bucket_name: str, folder_path: str):
             except Exception as e:
                 pass
 
-def generate_download_url(client= client):
+def generate_download_url(job: str, client= client):
     try:
-        return client.presigned_get_object("jobs-pdf", "Data Scientist.pdf")
+        return client.presigned_get_object("jobs-pdf", f"{job}.pdf")
     except Exception as e:
         print(f"Erreur lors de la génération de l'URL signée : {str(e)}")
         return None

@@ -24,9 +24,9 @@ async def show_jobs(request : Request):
     jobs= jobs_list()
     return templates.TemplateResponse('index.html', {"request": request, "jobs": jobs})
 
-@jobsRouter.get("/jobs/test")
-async def download_info_endpoint():
-    download_url = generate_download_url(client=client)
+@jobsRouter.get("/jobs/{job}")
+async def download_info_endpoint(job):
+    download_url = generate_download_url(job, client=client)
     if download_url:
         return {"download_url": download_url}
     else:
