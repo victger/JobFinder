@@ -7,6 +7,8 @@
   <body>
     <h1>Liste des métiers</h1>
 
+    <p>Certaines fiches métiers sont disponibles.</p>
+
     <ul>
       {% for job in jobs %}
         <li>{{ job }}</li>
@@ -21,21 +23,9 @@
 <script>
 
 async function downloadInfo(job) {
-    try {
-        const response = await fetch(`/jobs/download_info_${job}`);
-        const data = await response.json();
 
-        // Vérifier si l'URL de téléchargement est disponible dans la réponse
-        if (data.download_url) {
-            // Initier le téléchargement du fichier en utilisant l'URL obtenue
-            window.location.href = data.download_url;
-        } else {
-            console.error("Erreur lors de la génération de l'URL signée.");
-        }
-    } catch (error) {
-        console.error("Erreur lors du téléchargement du fichier:", error);
-    }
+  window.location.href=`/jobs/download/${job}`;
+
 }
-
 
 </script>
