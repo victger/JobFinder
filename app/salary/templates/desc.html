@@ -19,6 +19,9 @@
         <tr>
           <td>{{ salary.job_title }}</td>
           <td>{{ salary.salary }}</td>
+          {% if salary.job_title in ['Data Scientist', 'Data Engineer', 'Data Analyst']%}
+            <td><button onclick="location.href='/jobs/download/{{ salary.job_title }}'">Download info</button></td>
+          {%endif%}
         </tr>
         {% endfor %} {% endif %}
       </tbody>
