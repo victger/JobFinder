@@ -8,17 +8,18 @@ Lien dataset : https://www.kaggle.com/datasets/willianoliveiragibin/data-jobs-sa
 
 Pour lancer notre projet, voilà les démarches à suivre :
 
-1) Télécharger le repo en local
+1. Télécharger le repo en local
 
-2) Dans un terminal, se placer à la racine du projet
+2. Dans un terminal, se placer à la racine du projet
 
-3) Exécuter les commandes suivantes :
+3. Exécuter les commandes suivantes :
 
 ```
 docker compose build
 docker compose up
 ```
-4) Une fois les conteneurs créés dans Docker, on l'ouvre et on accès à l'API. On peut alors utiliser l'application normalement.
+
+4. Une fois les conteneurs créés dans Docker, on l'ouvre et on accès à l'API. On peut alors utiliser l'application normalement.
 
 ## Construction du projet
 
@@ -40,5 +41,23 @@ Diverses fonctionnalités ont été réalisées dans le cadre du développement 
 - Les pratiques de développement logiciel visant à organiser le code de manière modulaire et à séparer les préoccupations dans toutes les parties du projet.
 
 Évidemment, l'intégration de Docker au sein du projet permet également une portabilité de notre application et la facilité de son déploiement.
+
+## Navigation sur le site
+
+### Page d'accueil (non connecté)
+
+Dans la page d'accueil, vous avez deux options. La première est de vous connecter si vous avez déjâ un compte. La seconde est de ciquer sur créer un compte. Cela vous redirigera vers une page pour créer un compte.
+
+### Page d'accueil (connecté)
+
+Une fois connecté, vous avez accès a deux pages. A partir de ce moment, la site reconnait l'utilisateurv ia la gestion de token.
+
+### Jobs
+
+La section jobs permet a l'utilisateur de telecharger les fiches metiers correspondant a chaque métier.
+
+### Salary
+
+La section salary permet de visualiser les jobs disponibles selon les critères de localisation et selon la description du job.
 
 Créé par Y.Lakhdari, V.Gerard, Y.Tissot.
