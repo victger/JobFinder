@@ -18,7 +18,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 # Fonction de validation du token
 def get_current_user(token: str = Depends(oauth2_scheme)):
     # Vous pouvez ici vérifier la validité du token
-    print("token type", type(token))
+    # print("token type", type(token))
     print("_"*20)
     if type(token) is not str:
         raise HTTPException(
@@ -47,7 +47,7 @@ async def show_from_desc(request: Request, loc: str, desc: str, page: int=1, db 
     items_per_page = 20
     offset = (page - 1) * items_per_page
     res, stats, total_pages = search_salaries(loc, desc, skip=offset, limit=items_per_page, db=db)
-    return templates.TemplateResponse("index.html", {"request": request, "salaries": res, "page": page, "total_pages": total_pages, "loc":loc, "desc": desc})
+    return templates.TemplateResponse("index.html", {"request": request, "salaries": res, "page": page, "total_pages": total_pages, "loc":loc, "desc": desc, 'stats': stats})
 
 @salariesRouter.get("/salary/show_cv/")
 async def show_cv(request: Request):

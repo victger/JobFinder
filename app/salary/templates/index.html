@@ -49,7 +49,26 @@
       Chercher selon mon CV
     </button>
     <button onclick="chooseFile()">Ajouter mon CV</button>
-    <h1>Statistics for Description: {{ location }}</h1>
+    <h1>Statistics</h1>
+    {%if stats%}
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for key, value in stats.items() %}
+        <tr>
+          <td>{{ key }}</td>
+          <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {%endif%}
+    <h1>Jobs</h1>
     <table>
       <thead>
         <tr>
@@ -64,8 +83,15 @@
           <td>{{ salary.job_title }}</td>
           <td>{{ salary.salary }}</td>
           <td>{{ salary.company_location }}</td>
-          {% if salary.job_title in ['Data Scientist', 'Data Engineer', 'Data Analyst']%}
-            <td><button onclick="location.href='/jobs/download/{{ salary.job_title }}'">Download info</button></td>
+          {% if salary.job_title in ['Data Scientist', 'Data Engineer', 'Data
+          Analyst']%}
+          <td>
+            <button
+              onclick="location.href='/jobs/download/{{ salary.job_title }}'"
+            >
+              Download info
+            </button>
+          </td>
           {%endif%}
         </tr>
         {% endfor %} {%endif%}
@@ -113,15 +139,19 @@
     </form>
 
     <a href="/accueil" class="home-button">
-      <svg class="home-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M12 2l-12 10h4v10h16v-10h4l-12-10zm4 15h-3v-3h-4v3h-3l5-5 5 5z"/>
+      <svg
+        class="home-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M12 2l-12 10h4v10h16v-10h4l-12-10zm4 15h-3v-3h-4v3h-3l5-5 5 5z"
+        />
       </svg>
     </a>
-
   </body>
 
   <style>
-
     .home-button {
       position: fixed;
       top: 20px;
@@ -133,13 +163,11 @@
       z-index: 999;
       cursor: pointer;
     }
-  
+
     .home-icon {
       width: 24px;
       height: 24px;
       fill: #000000;
     }
-  
-    </style>
-
+  </style>
 </html>

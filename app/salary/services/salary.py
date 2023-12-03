@@ -26,11 +26,11 @@ def create_salaries_from_csv(csv_path: str=SALARY_PATH):
 def get_mean_salary(query):
     return query.session.query(func.avg(Salary.salary)).scalar()
 
-def get_stats_from_loc(loc: str, db: Depends(get_db)=Depends(get_db)):
-    mean = db.query(func.avg(Salary.salary)).filter(Salary.company_location.ilike(loc)).scalar()
+def get_stats(query: Query):
+    mean = query.with_entities(func.avg(Salary.salary)).scalar()
     mean = round(mean)
-    size = db.query(Salary).count()
-    return mean, size
+    size = query.count()
+    return {"total": size, "moyenne": mean}
 
 def get_mean_salary(df):
     pass
@@ -53,7 +53,7 @@ def search_salaries(loc: str, desc: str, skip=1, limit=10, db=Depends(get_db)):
     query = query.offset(skip).limit(limit)
     page = query.all()
     total_pages = tot // limit + 1
-    stats = None
+    stats = get_stats(query)
     return page, stats, total_pages
 
 def show_Mcv(user_token: str):
