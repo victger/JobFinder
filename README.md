@@ -15,9 +15,20 @@ Pour lancer notre projet, voilà les démarches à suivre :
 3) Exécuter les commandes suivantes :
 
 ```
-docker compose up
 docker compose build
+docker compose up
 ```
+4) Une fois les conteneurs créés dans Docker, on l'ouvre et on accès à l'API. On peut alors utiliser l'application normalement.
+
+## Construction du projet
+
+### Packages
+
+Ce projet a été réalisé en utilisant les frameworks FastAPI, Minio, et SQLAlchemy. Ces outils nous ont permis de faire un backend complet.
+
+### Arborescence du projet
+
+L'arborescence de ce projet se base sur la séparation de toutes les parties de notre application dans des dossiers distincts. Ainsi, notre fichier main.py appellent simplement les routes permettant de naviguer à travers notre application.
 
 ## Objectifs :
 
@@ -34,5 +45,4 @@ docker compose build
 
 ## Sécurité (optionnel)
 
-Notation basée sur le backend et frontend surtout en bonus.
 Créé par Y.Lakhdari, V.Gerard, Y.Tissot.
