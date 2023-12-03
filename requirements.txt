@@ -13,5 +13,4 @@ alembic
 #Data management
 pandas
 numpy
-
 PyPDF2
