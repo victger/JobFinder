@@ -1,8 +1,34 @@
 # JobFinder
 
+Ce projet a pour but d'offrir à un utilisateur la possibilité de chercher des métiers à partir d'une situation désirée basée sur des critères de salaire ou de localisation du métier en question. Notre base de données utilisée est la suivante :
+
 Lien dataset : https://www.kaggle.com/datasets/willianoliveiragibin/data-jobs-salaries
 
-Lien frontend : https://streamlit.io/
+## Utilisation
+
+Pour lancer notre projet, voilà les démarches à suivre :
+
+1) Télécharger le repo en local
+
+2) Dans un terminal, se placer à la racine du projet
+
+3) Exécuter les commandes suivantes :
+
+```
+docker compose build
+docker compose up
+```
+4) Une fois les conteneurs créés dans Docker, on l'ouvre et on accès à l'API. On peut alors utiliser l'application normalement.
+
+## Construction du projet
+
+### Packages
+
+Ce projet a été réalisé en utilisant les frameworks FastAPI, Minio, et SQLAlchemy. Ces outils nous ont permis de faire un backend complet.
+
+### Arborescence du projet
+
+L'arborescence de ce projet se base sur la séparation de toutes les parties de notre application dans des dossiers distincts. Ainsi, notre fichier main.py appellent simplement les routes permettant de naviguer à travers notre application.
 
 ## Objectifs :
 
@@ -15,11 +41,8 @@ Lien frontend : https://streamlit.io/
 
 ## Mise en place
 
-## Frontend via streamlit
-
 ## Base de données
 
 ## Sécurité (optionnel)
 
-Notation basée sur le backend et frontend surtout en bonus.
 Créé par Y.Lakhdari, V.Gerard, Y.Tissot.
