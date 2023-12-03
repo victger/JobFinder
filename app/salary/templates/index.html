@@ -1,21 +1,31 @@
 <!DOCTYPE html>
-
 <script>
   function chooseFile() {
     var fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.addEventListener("change", function (event) {
-      var file = event.target.files[0];
-      var form = new FormData();
-      form.append("file", file);
-
-      fetch("salary/add_cv", {
-        method: "POST",
-        body: form,
-      });
+      var selectedFile = event.target.files[0];
+      uploadFile(selectedFile);
     });
 
     fileInput.click();
+  }
+
+  function uploadFile(file) {
+    var form = new FormData();
+    form.append("file", file);
+
+    fetch("/salary/add_cv/", {
+      method: "POST",
+      body: form,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Réponse du serveur :", data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de l'envoi du fichier :", error);
+      });
   }
 </script>
 
@@ -27,27 +37,25 @@
   </head>
   <body>
     <h1>Statistics by Location</h1>
-    <form action="/salary/show_stats_from_loc/" method="get">
+    <form action="/salary/show_salaries/" method="get">
       <label for="location">Enter Location:</label>
       <input type="text" id="location" name="loc" required />
-      <button type="submit">Get Statistics</button>
-    </form>
-    <button onclick="location.href='/salary/show_cv'">
-      Chercher selon mon CV
-    </button>
-    <button onclick="choose_file">Ajouter mon CV</button>
-    <form action="/salary/show_from_desc/" method="get">
+      <br />
       <label for="description">Enter description:</label>
       <input type="text" id="description" name="desc" required />
       <button type="submit">Get Results</button>
     </form>
-
+    <button onclick="location.href='/salary/show_cv'">
+      Chercher selon mon CV
+    </button>
+    <button onclick="chooseFile()">Ajouter mon CV</button>
     <h1>Statistics for Description: {{ location }}</h1>
     <table>
       <thead>
         <tr>
           <th>Job Title</th>
           <th>Salary</th>
+          <th>Location</th>
         </tr>
       </thead>
       <tbody>
@@ -55,6 +63,7 @@
         <tr>
           <td>{{ salary.job_title }}</td>
           <td>{{ salary.salary }}</td>
+          <td>{{ salary.company_location }}</td>
         </tr>
         {% endfor %} {%endif%}
       </tbody>
@@ -62,10 +71,11 @@
     <div class="pagination">
       <span class="step-links">
         {% if page > 1 %}
-        <a href="/salary/show_from_desc/?desc={{ desc }}&page=1"
+        <a href="/salary/show_salaries/?desc={{ desc }}&loc={{ loc }}&page=1"
           >&laquo; first</a
         >
-        <a href="/salary/show_from_desc/?desc={{ desc }}&page={{ page-1 }}"
+        <a
+          href="/salary/show_salaries/?desc={{ desc }}&loc={{ loc }}&page={{ page-1 }}"
           >previous</a
         >
         {% endif %}
@@ -73,10 +83,12 @@
         <span class="current"> Page {{ page }} of {{ total_pages }} </span>
 
         {% if page < total_pages %}
-        <a href="/salary/show_from_desc/?desc={{ desc }}&page={{ page+1 }}"
+        <a
+          href="/salary/show_salaries/?desc={{ desc }}&loc={{ loc }}&page={{ page+1 }}"
           >next</a
         >
-        <a href="/salary/show_from_desc/?desc={{ desc }}&page={{ total_pages }}"
+        <a
+          href="/salary/show_salaries/?desc={{ desc }}&loc={{ loc }}&page={{ total_pages }}"
           >last &raquo;</a
         >
         {% endif %}
@@ -84,7 +96,7 @@
     </div>
 
     <!-- Ajout du bouton pour changer de page -->
-    <form action="/salary/show_from_desc/" method="get">
+    <form action="/salary/show_salaries/" method="get">
       <label for="new_page">Go to Page:</label>
       <input
         type="number"
