@@ -3,7 +3,7 @@ import numpy as np
 import io
 from sqlalchemy import func
 
-from fastapi import Depends, UploadFile, Query
+from fastapi import Depends, UploadFile, Query, HTTPException
 from salary.models.salary import Salary
 
 from db.services.db import engine, get_db
@@ -14,6 +14,7 @@ import PyPDF2
 from tkinter import Tk, filedialog
 
 from Minio.minio import client
+
 SALARY_PATH = "data/salaries.csv"
 
 
@@ -57,16 +58,19 @@ def search_salaries(loc: str, desc: str, skip=1, limit=10, db=Depends(get_db)):
     return page, stats, total_pages
 
 def show_Mcv(user_token: str):
-    pdf_data  = client.get_object(
+    try:
+        pdf_data  = client.get_object(
         "users",
         f"{user_token}/cv.pdf",
     ).read()
-    pdf_document = PyPDF2.PdfReader(BytesIO(pdf_data))
-    text = ""
-    for page_num in range(len(pdf_document.pages)):
-            page = pdf_document.pages[page_num]
-            text += page.extract_text()
-    return {"text": text}
+        pdf_document = PyPDF2.PdfReader(BytesIO(pdf_data))
+        text = ""
+        for page_num in range(len(pdf_document.pages)):
+                page = pdf_document.pages[page_num]
+                text += page.extract_text()
+        return {"text": text}
+    except:
+        raise HTTPException(status_code=500, detail="Erreur lors de la vérification de l'existence de l'objet")
 
 def add_Mcv(user_token: str, file: UploadFile):
     content = file.file.read()
