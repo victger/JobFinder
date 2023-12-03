@@ -20,9 +20,6 @@ async def show_jobs(request : Request):
     return templates.TemplateResponse('index.html', {"request": request, "jobs": jobs})
 
 @jobsRouter.get("/jobs/download/{job}")
-async def download_info_endpoint(job):
-    download_url = generate_download_url(job)
-    if download_url:
-        return {"download_url": download_url}
-    else:
-        return {"message": "Erreur lors de la génération de l'URL signée"}
+async def download_info_endpoint(request : Request, job):
+    download_object(job)
+    return templates.TemplateResponse('download.html', {"request": request})
