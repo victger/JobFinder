@@ -1,25 +1,44 @@
 # JobFinder
 
+Ce projet a pour but d'offrir à un utilisateur la possibilité de chercher des métiers à partir d'une situation désirée basée sur des critères de salaire ou de localisation du métier en question. Notre base de données utilisée est la suivante :
+
 Lien dataset : https://www.kaggle.com/datasets/willianoliveiragibin/data-jobs-salaries
 
-Lien frontend : https://streamlit.io/
+## Utilisation
 
-## Objectifs :
+Pour lancer notre projet, voilà les démarches à suivre :
 
-- Créer une interface utilisateur
-- Créer page d'accueil avec les différents paramètres de jobs
-- Proposer les critères salaire, pays, remote ratio (à compléter)
-- Proposer un job selon les critères choisis
-- Proposer des courbes selon les critères choisis
-- Webscrapper les offres de métier sur le web (optionnel)
+1) Télécharger le repo en local
 
-## Mise en place
+2) Dans un terminal, se placer à la racine du projet
 
-## Frontend via streamlit
+3) Exécuter les commandes suivantes :
 
-## Base de données
+```
+docker compose build
+docker compose up
+```
+4) Une fois les conteneurs créés dans Docker, on l'ouvre et on accès à l'API. On peut alors utiliser l'application normalement.
 
-## Sécurité (optionnel)
+## Construction du projet
 
-Notation basée sur le backend et frontend surtout en bonus.
+### Packages
+
+Ce projet a été réalisé en utilisant les frameworks FastAPI, Minio, et SQLAlchemy. Ces outils nous ont permis de faire un backend complet.
+
+### Arborescence du projet
+
+L'arborescence de ce projet se base sur la séparation de toutes les parties de notre application dans des dossiers distincts. Ainsi, notre fichier main.py appellent simplement les routes permettant de naviguer à travers notre application.
+
+## Fonctionnalités réalisées
+
+Diverses fonctionnalités ont été réalisées dans le cadre du développement de ce projet :
+
+- L'authentification dans la partie user. Elle se fait via la génération de tokens, du hachage, et de l'insertion dans notre base de données. Par la suite, diverses fonctions ont été élaborées pour assurer l'authentification sur l'application.
+- L'utilisation de Minio dans la partie jobs. Minio permet de stocker des objets non structurés de manière sécurisée.
+- Beaucoup de requêtes de données dans la partie salary.
+- Les pratiques de développement logiciel visant à organiser le code de manière modulaire et à séparer les préoccupations dans toutes les parties du projet.
+
+Évidemment, l'intégration de Docker au sein du projet permet également une portabilité de notre application et la facilité de son déploiement.
+
 Créé par Y.Lakhdari, V.Gerard, Y.Tissot.
