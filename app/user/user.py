@@ -49,10 +49,9 @@ async def submit_user(username: str = Form(...),password: str = Form(...),db: Se
 
 @userRouter.get('/accueil')
 async def accueil(request: Request, user_token = Depends(get_current_user),DB: Session = Depends(get_db)):
-    print("test", user_token)
     if type(user_token) is not str:
         return user_token
     
     with open(f'{FRONT_PATH}/accueil.html', 'r') as file:
         html_content = file.read()
-    return HTMLResponse(content= html_content.replace('user',get_user_token(DB,user_token).username), status_code=200)
+    return HTMLResponse(content = html_content.replace('user',get_user_token(DB,user_token).username), status_code=200)

@@ -29,7 +29,6 @@ def get_user(db: Session,username: str) -> MUser:
     return record
 
 def create_user(db: Session, username:str, password:str):
-    print('_'*20, username)
     db_post = MUser(id=uuid4(), username=username, password=password, created_at=str(dt.now()))
     db.add(db_post)
     db.commit()
@@ -61,11 +60,12 @@ def auth_token(db: Session, token: str) -> bool:
         pass
     return False
 
-async def get_current_user(request: Request, DB: Session = Depends(get_db)):
+def get_current_user(request: Request, DB: Session = Depends(get_db)):
     try:
         token = request.cookies["token"]
         user_authenticated = auth_token(DB, token)
         if user_authenticated:
+            print("token: ", token)
             return token
     except:
         pass
