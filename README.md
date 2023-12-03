@@ -1,8 +1,23 @@
 # JobFinder
 
+Ce projet a pour but d'offrir à un utilisateur la possibilité de chercher des métiers à partir d'une situation désirée basée sur des critères de salaire ou de localisation du métier en question. Notre base de données utilisée est la suivante :
+
 Lien dataset : https://www.kaggle.com/datasets/willianoliveiragibin/data-jobs-salaries
 
-Lien frontend : https://streamlit.io/
+## Utilisation
+
+Pour lancer notre projet, voilà les démarches à suivre :
+
+1) Télécharger le repo en local
+
+2) Dans un terminal, se placer à la racine du projet
+
+3) Exécuter les commandes suivantes :
+
+```
+docker compose up
+docker compose build
+```
 
 ## Objectifs :
 
@@ -14,8 +29,6 @@ Lien frontend : https://streamlit.io/
 - Webscrapper les offres de métier sur le web (optionnel)
 
 ## Mise en place
-
-## Frontend via streamlit
 
 ## Base de données
 
