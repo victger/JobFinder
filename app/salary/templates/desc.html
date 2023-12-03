@@ -26,5 +26,34 @@
         {% endfor %} {% endif %}
       </tbody>
     </table>
+
+    <a href="/accueil" class="home-button">
+      <svg class="home-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 2l-12 10h4v10h16v-10h4l-12-10zm4 15h-3v-3h-4v3h-3l5-5 5 5z"/>
+      </svg>
+    </a>
+
+  <style>
+
+  .home-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 50%;
+    padding: 10px;
+    z-index: 999;
+    cursor: pointer;
+  }
+
+  .home-icon {
+    width: 24px;
+    height: 24px;
+    fill: #000000;
+  }
+
+  </style>
+
   </body>
 </html>
