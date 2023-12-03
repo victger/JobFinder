@@ -1,32 +1,34 @@
 
-from fastapi import Depends, APIRouter, Request, File, UploadFile
+from fastapi import Depends, APIRouter, Request, File, UploadFile, Cookie
 
-from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from db.services.db import get_db
-
-from user.services.user import get_current_user
 
 from salary.services.salary import *
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
+from user.user import get_current_user
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Fonction de validation du token
-def get_current_user(token: str = Depends(oauth2_scheme)):
-    # Vous pouvez ici vérifier la validité du token
-    # print("token type", type(token))
-    print("_"*20)
-    if type(token) is not str:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    return token
+# def get_current_user(token_cookie: str = Cookie(...)):
+#     # Vous pouvez ici vérifier la validité du token
+#     print("_" * 20)
+    
+#     if not (isinstance(token_cookie, str) and len(token_cookie) > 0):
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED,
+#             detail="Invalid token",
+#             headers={"WWW-Authenticate": "Bearer"},
+#         )
+
+#     # Ajoutez ici la logique de validation de votre token si nécessaire
+
+#     return token_cookie
 
 salariesRouter = APIRouter()
 
@@ -36,9 +38,8 @@ async def startup_event():
 
 templates = Jinja2Templates(directory="salary/templates")
 
-@salariesRouter.get("/salary", response_class=HTMLResponse)
+@salariesRouter.get("/salary/", dependencies=[Depends(get_current_user)])
 async def show_form(request: Request):
-    print(request.cookies)
     return templates.TemplateResponse("index.html", {"request": request, "page": 1, "total_pages": 1, "loc": "US", "desc": "Data"})
 
 
